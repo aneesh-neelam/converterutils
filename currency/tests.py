@@ -3,7 +3,7 @@ from django.test import TestCase
 from .models import Currency, ConversionRates
 
 
-class CurrencyE2eTest(TestCase):
+class CurrencyModelsTest(TestCase):
     def create_currencies(self):
         Currency.objects.create(code='USD', name='US Dollar', symbol='$')
         Currency.objects.create(code='INR', name='Indian Rupee', symbol='₹')
