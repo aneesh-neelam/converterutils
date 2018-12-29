@@ -20,6 +20,12 @@ class CurrencyModelsTest(TestCase):
         ConversionRates.objects.create(currency_id='EUR', base_currency_id='INR', exchange_rate=79.98)
         ConversionRates.objects.create(currency_id='GBP', base_currency_id='INR', exchange_rate=88.86)
 
+    def delete_conversion_rates(self):
+        ConversionRates.objects.all().delete()
+
+    def delete_currencies(self):
+        Currency.objects.all().delete()
+
     def setUp(self):
         self.create_currencies()
         self.create_conversion_rates()
@@ -40,3 +46,7 @@ class CurrencyModelsTest(TestCase):
         # Get Exchange rates for all currencies against INR
         exchange_rates_for_inr = ConversionRates.objects.filter(base_currency_id='INR')
         self.assertEqual(exchange_rates_for_inr.count(), 4)
+
+    def tearDown(self):
+        self.create_conversion_rates()
+        self.delete_currencies()
