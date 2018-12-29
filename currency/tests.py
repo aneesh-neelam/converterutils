@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import Currency, ConversionRates
+from .models import Currency, ConversionRate
 
 
 class CurrencyModelsTest(TestCase):
@@ -11,17 +11,17 @@ class CurrencyModelsTest(TestCase):
         Currency.objects.create(code='GBP', name='Pound Sterling', symbol='£')
 
     def create_conversion_rates(self):
-        ConversionRates.objects.create(currency_id='USD', base_currency_id='USD', exchange_rate=1.0)
-        ConversionRates.objects.create(currency_id='INR', base_currency_id='USD', exchange_rate=0.014)
-        ConversionRates.objects.create(currency_id='EUR', base_currency_id='USD', exchange_rate=1.14)
-        ConversionRates.objects.create(currency_id='GBP', base_currency_id='USD', exchange_rate=1.27)
-        ConversionRates.objects.create(currency_id='USD', base_currency_id='INR', exchange_rate=69.93)
-        ConversionRates.objects.create(currency_id='INR', base_currency_id='INR', exchange_rate=1.0)
-        ConversionRates.objects.create(currency_id='EUR', base_currency_id='INR', exchange_rate=79.98)
-        ConversionRates.objects.create(currency_id='GBP', base_currency_id='INR', exchange_rate=88.86)
+        ConversionRate.objects.create(currency_id='USD', base_currency_id='USD', exchange_rate=1.0)
+        ConversionRate.objects.create(currency_id='INR', base_currency_id='USD', exchange_rate=0.014)
+        ConversionRate.objects.create(currency_id='EUR', base_currency_id='USD', exchange_rate=1.14)
+        ConversionRate.objects.create(currency_id='GBP', base_currency_id='USD', exchange_rate=1.27)
+        ConversionRate.objects.create(currency_id='USD', base_currency_id='INR', exchange_rate=69.93)
+        ConversionRate.objects.create(currency_id='INR', base_currency_id='INR', exchange_rate=1.0)
+        ConversionRate.objects.create(currency_id='EUR', base_currency_id='INR', exchange_rate=79.98)
+        ConversionRate.objects.create(currency_id='GBP', base_currency_id='INR', exchange_rate=88.86)
 
     def delete_conversion_rates(self):
-        ConversionRates.objects.all().delete()
+        ConversionRate.objects.all().delete()
 
     def delete_currencies(self):
         Currency.objects.all().delete()
@@ -36,17 +36,17 @@ class CurrencyModelsTest(TestCase):
         self.assertEqual(currencies.count(), 4)
 
         # Test number of exchange rate entries in Database
-        conversion_rates = ConversionRates.objects.all()
+        conversion_rates = ConversionRate.objects.all()
         self.assertEqual(conversion_rates.count(), 8)
 
         # Get Exchange rates for all currencies against USD
-        exchange_rates_for_usd = ConversionRates.objects.filter(base_currency_id='USD')
+        exchange_rates_for_usd = ConversionRate.objects.filter(base_currency_id='USD')
         self.assertEqual(exchange_rates_for_usd.count(), 4)
 
         # Get Exchange rates for all currencies against INR
-        exchange_rates_for_inr = ConversionRates.objects.filter(base_currency_id='INR')
+        exchange_rates_for_inr = ConversionRate.objects.filter(base_currency_id='INR')
         self.assertEqual(exchange_rates_for_inr.count(), 4)
 
     def tearDown(self):
-        self.create_conversion_rates()
+        self.delete_conversion_rates()
         self.delete_currencies()
