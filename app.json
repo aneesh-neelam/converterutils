@@ -5,9 +5,6 @@
     }
   ],
   "environments": {
-    "addons": [
-      "heroku-postgresql:in-dyno"
-    ],
     "test": {
       "scripts": {
         "test-setup": "python manage.py migrate",
@@ -18,7 +15,10 @@
             "quantity": 1,
             "size": "standard-1x"
           }
-      }
+      },
+      "addons": [
+        "heroku-postgresql:in-dyno"
+      ]
     }
   }
 }
