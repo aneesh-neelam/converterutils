@@ -144,6 +144,11 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+
+# Setup REST Framework
+REST_FRAMEWORK = {
+}
+
 # Setup Rollbar
 if os.environ.get('ROLLBAR_ACCESS_TOKEN'):
     ROLLBAR = {
@@ -153,9 +158,7 @@ if os.environ.get('ROLLBAR_ACCESS_TOKEN'):
         'root': os.getcwd(),
         'patch_debugview': False,
     }
-    REST_FRAMEWORK = {
-        'EXCEPTION_HANDLER': 'rollbar.contrib.django_rest_framework.post_exception_handler'
-    }
+    REST_FRAMEWORK['EXCEPTION_HANDLER'] = 'rollbar.contrib.django_rest_framework.post_exception_handler'
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
