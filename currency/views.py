@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import HttpResponse
 
-# Create your views here.
+
+def api_currency_v1(request):
+    return HttpResponse("Currency API v1 Index page")
+
+
+def api_currency_v1_convert(request):
+    return HttpResponse("Currency Convert API v1")

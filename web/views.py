@@ -11,7 +11,3 @@ def api(request):
 
 def api_v1(request):
     return HttpResponse("API v1 Index page")
-
-
-def api_currency_v1(request):
-    return HttpResponse("Currency API v1 Index page")
