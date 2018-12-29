@@ -7,4 +7,5 @@ urlpatterns = [
     path('api/', views.api, name='api'),
     path('api/v1/', views.api_v1, name='api_v1'),
     path('api/v1/currency/', include('currency.urls')),
+    path('api/v1/numbersystem/', include('numbersystem.urls')),
 ]
