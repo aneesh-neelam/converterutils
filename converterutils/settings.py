@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'converterutils.wsgi.application'
 
 if os.environ.get('DATABASE_URL'):
     DATABASES = {
-        'default': dj_database_url.config(conn_max_age=600, ssl_require=False),
+        'default': dj_database_url.config(conn_max_age=600, ssl_require=True),
     }
 else:
     DATABASES = {

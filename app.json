@@ -17,7 +17,7 @@
           }
       },
       "addons": [
-        "heroku-postgresql:in-dyno"
+        "heroku-postgresql:hobby-dev"
       ]
     }
   }
