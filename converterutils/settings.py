@@ -29,7 +29,7 @@ else :
     SECRET_KEY = '($#j)@d#r52)ehr^4xfx6bo&9(!%3y1e-4@y-0-*=k76l6kmk='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get("PROD"):
+if os.environ.get('PROD'):
     DEBUG = False
 else:
     DEBUG = True
