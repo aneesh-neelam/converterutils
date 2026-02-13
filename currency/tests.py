@@ -1,4 +1,6 @@
-from django.test import TestCase
+import json
+
+from django.test import TestCase, Client
 
 from .models import Currency, ConversionRate
 
@@ -50,3 +52,71 @@ class CurrencyModelsTest(TestCase):
     def tearDown(self):
         self.delete_conversion_rates()
         self.delete_currencies()
+
+
+class CurrencyViewsTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        Currency.objects.create(code='USD', name='US Dollar', symbol='$')
+        Currency.objects.create(code='INR', name='Indian Rupee', symbol='₹')
+        ConversionRate.objects.create(currency_id='USD', base_currency_id='INR', exchange_rate=69.93)
+        ConversionRate.objects.create(currency_id='INR', base_currency_id='USD', exchange_rate=0.014)
+
+    def test_currency_list(self):
+        response = self.client.get('/api/v1/currency/')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertIn('currencies', data)
+        self.assertEqual(len(data['currencies']), 2)
+
+    def test_convert_success(self):
+        response = self.client.get('/api/v1/currency/convert/', {
+            'from': 'USD',
+            'to': 'INR',
+            'amount': '100',
+        })
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(data['from'], 'USD')
+        self.assertEqual(data['to'], 'INR')
+        self.assertEqual(data['amount'], 100.0)
+        self.assertAlmostEqual(data['converted_amount'], 6993.0)
+        self.assertEqual(data['exchange_rate'], 69.93)
+
+    def test_convert_missing_params(self):
+        response = self.client.get('/api/v1/currency/convert/')
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.content)
+        self.assertIn('error', data)
+
+    def test_convert_invalid_amount(self):
+        response = self.client.get('/api/v1/currency/convert/', {
+            'from': 'USD',
+            'to': 'INR',
+            'amount': 'abc',
+        })
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.content)
+        self.assertIn('error', data)
+
+    def test_convert_unknown_pair(self):
+        response = self.client.get('/api/v1/currency/convert/', {
+            'from': 'USD',
+            'to': 'EUR',
+            'amount': '100',
+        })
+        self.assertEqual(response.status_code, 404)
+        data = json.loads(response.content)
+        self.assertIn('error', data)
+
+    def test_convert_only_allows_get(self):
+        response = self.client.post('/api/v1/currency/convert/', {
+            'from': 'USD',
+            'to': 'INR',
+            'amount': '100',
+        })
+        self.assertEqual(response.status_code, 405)
+
+    def tearDown(self):
+        ConversionRate.objects.all().delete()
+        Currency.objects.all().delete()
